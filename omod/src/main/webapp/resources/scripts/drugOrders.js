@@ -58,18 +58,25 @@ angular.module('drugOrders', ['orderService', 'encounterService', 'uicommons.fil
         // TODO changing dosingType of a draft order should reset defaults (and discard non-defaulted properties)
           var programRegimens = OpenMRS.kenyaemrRegimenJsonPayload;
         $scope.showRegimenPanel = false;
+        console.log("single_drugs put outside function=====",OpenMRS.activeOrdersPayload.single_drugs);
+        console.log("Order group put outside function=====",OpenMRS.activeOrdersPayload.order_groups[0].components);
+
 
         function loadExistingOrders() {
-            $scope.activeDrugOrders = {loading: true};
+          //  $scope.activeDrugOrders = {loading: true};
+            console.log("OpenMRS.activeOrdersPayload.single_drugs=====",OpenMRS.activeOrdersPayload.single_drugs);
             OrderService.getOrders({
                 t: 'drugorder',
                 v: 'full',
                 patient: config.patient.uuid,
-                careSetting: $scope.careSetting.uuid
+                careSetting: $scope.careSetting.uuid,
+                status: 'active'
             }).then(function (results) {
+                console.log("Entering the then function");
                 $scope.activeDrugOrders = _.map(OpenMRS.activeOrdersPayload.single_drugs, function (item) {
                     return new OpenMRS.DrugOrderModel(item)
                 });
+                console.log("$scope.activeDrugOrders=======",$scope.activeDrugOrders);
                 $scope.activeDrugOrders.sort(function(a, b) {
                     var key1 = a.dateActivated;
                     var key2 = b.dateActivated;
@@ -83,6 +90,7 @@ angular.module('drugOrders', ['orderService', 'encounterService', 'uicommons.fil
                 });
                 $scope.patientRegimens = addRegimenStatus(programRegimens);
                 $scope.patientActiveDrugOrders = OpenMRS.activeOrdersPayload;
+                console.log(" $scope.patientActiveDrugOrders============", $scope.patientActiveDrugOrders);
                 if($scope.patientActiveDrugOrders) {
                     if($scope.patientActiveDrugOrders.order_groups[0]) {
                         $scope.patientRegimenInstruction =formatDisplayOfRegimenInstructions($scope.patientActiveDrugOrders.order_groups[0].components);
@@ -241,6 +249,7 @@ angular.module('drugOrders', ['orderService', 'encounterService', 'uicommons.fil
 
         var config = OpenMRS.drugOrdersConfig;
         $scope.init = function () {
+            console.log("============ I am getting here please");
             $scope.routes = config.routes;
             $scope.doseUnits = config.doseUnits;
             $scope.durationUnits = config.durationUnits;
@@ -406,6 +415,8 @@ angular.module('drugOrders', ['orderService', 'encounterService', 'uicommons.fil
             $scope.quantity_units = angular.element('#quantity_units').val();
             $scope.quantity = angular.element('#quantity').val();
             $scope.frequency = angular.element('#frequency').val();
+            $scope.duration = angular.element('#duration').val();
+            console.log("duration=========",$scope.duration);
             var orderSetComponents = [];
             if(config.provider === '' || config.provider === undefined || config.provider === null) {
                 $scope.showErrorToast ='You are not login as provider, please contact System Administrator';
@@ -420,6 +431,7 @@ angular.module('drugOrders', ['orderService', 'encounterService', 'uicommons.fil
                     data['quantity_units'] = $scope.quantity_units;
                     data['quantity'] = $scope.quantity;
                     data['frequency'] = $scope.frequency;
+                    data['duration'] = $scope.duration;
                     if (data.hasOwnProperty(r)) {
                         if(isNaN(data.dose)) {
                             $scope.showErrorToast ='Dose value is not a number. Please enter a number';
@@ -520,6 +532,7 @@ angular.module('drugOrders', ['orderService', 'encounterService', 'uicommons.fil
             $scope.regimenLines = res.groupCodeName;
             $scope.regimenNames = res.regimenName;
             $scope.programName = res.program;
+            console.log("programName=======",$scope.programName);
             $scope.regimenStatus = res.regimenStatus;
             $scope.orderSetId = res.orderSetId;
             $scope.showRegimenPanel = true;
@@ -575,6 +588,7 @@ angular.module('drugOrders', ['orderService', 'encounterService', 'uicommons.fil
         }
 
         function formatDisplayOfRegimenInstructions(res) {
+            console.log("display regimen instruction===============",res)
             var orders = [];
             var instructionDesc = [];
             for (var i = 0; i < res.length; ++i) {

@@ -179,6 +179,11 @@
                 </span>
             </div>
 
+            <div>
+                Duration in days: <input ng-model="duration" size="5" id="duration">
+
+            </div>
+
             <div style="margin-top:5px;"><textarea ng-model="regimenDosingInstructions" rows="2" cols="80"
                                                    placeholder="Additional instruction not covered above"></textarea>
             </div>

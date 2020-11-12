@@ -70,6 +70,7 @@ public class RegimenDispensationFragmentController {
             DrugOrder drugOrder;
             String drugId=drugOrderJson.get("drug_id").toString();
             Double dose=Double.parseDouble(drugOrderJson.get("dose").toString());
+            Integer duration =Integer.parseInt(drugOrderJson.get("duration").toString());
             String doseUnitConceptUuiId=drugOrderJson.get("units_uuid").toString();
             String quantityUnitConceptUuiId=drugOrderJson.get("quantity_units").toString();
             String frequencyUuId=drugOrderJson.get("frequency").toString();
@@ -77,6 +78,7 @@ public class RegimenDispensationFragmentController {
             if(orderGroupExists){
                 drugOrder=(DrugOrder)orderService.getOrder(Integer.valueOf(drugOrderJson.get("order_id").toString())).cloneForRevision();
                 drugOrder.setDose(dose);
+                drugOrder.setDuration(duration);
                 Concept doseUnitConcept = conceptService.getConceptByUuid(doseUnitConceptUuiId);
                 Concept quantityUnitConcept=conceptService.getConceptByUuid(quantityUnitConceptUuiId);
                 drugOrder.setDoseUnits(doseUnitConcept);
@@ -98,6 +100,7 @@ public class RegimenDispensationFragmentController {
                 drugOrder.setInstructions(dosingInstructions);
                 drugOrder.setOrderer(provider);
                 drugOrder.setDose(dose);
+                drugOrder.setDuration(duration);
                 Concept doseUnitConcept = conceptService.getConceptByUuid(doseUnitConceptUuiId);
                 Concept quantityUnitConcept=conceptService.getConceptByUuid(quantityUnitConceptUuiId);
                 drugOrder.setDoseUnits(doseUnitConcept);

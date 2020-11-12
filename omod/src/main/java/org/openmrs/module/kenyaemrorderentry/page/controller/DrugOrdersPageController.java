@@ -100,13 +100,17 @@ public class DrugOrdersPageController {
                 component.put("conceptUuid", drugOrder.getDrug().getConcept().getUuid());
             //    component.put("name", drugOrder.getDrug().getConcept().getShortNameInLocale(LOCALE) != null ? drugOrder.getDrug().getConcept().getShortNameInLocale(LOCALE).getName() : drugOrder.getDrug().getConcept().getName(LOCALE).getName());
                 component.put("dose", drugOrder.getDose().toString());
+                if(drugOrder.getDuration() != null) {
+                    component.put("duration", drugOrder.getDuration().toString());
+
+                }
                 component.put("units_uuid", drugOrder.getDoseUnits().getUuid());
                 component.put("units_name", drugOrder.getDoseUnits().getName(LOCALE).getName());
                 component.put("frequency", drugOrder.getFrequency().getUuid());
                 component.put("frequency_name", drugOrder.getFrequency().getName());
                 component.put("drug_id", drugOrder.getDrug().getDrugId());
                 component.put("order_id",order.getOrderId());
-                component.put("quantity",drugOrder.getQuantity());
+                component.put("quantity",drugOrder.getQuantity().toString());
                 component.put("quantity_units_name",drugOrder.getQuantityUnits().getName(LOCALE).getName());
                 component.put("quantity_units",drugOrder.getQuantityUnits().getUuid());
                 if(order.getOrderGroup().getOrderGroupId()==previousOrderGroupId){
@@ -140,6 +144,10 @@ public class DrugOrdersPageController {
                 orderObj.put("drug", convertToFull(drugOrder.getDrug()));
                 orderObj.put("dosingType", drugOrder.getDosingType());
                 orderObj.put("dose", drugOrder.getDose());
+                if(drugOrder.getDuration() != null) {
+                    orderObj.put("duration",drugOrder.getDuration());
+                }
+               // orderObj.put("duration", drugOrder.getDuration() != null ?  drugOrder.getDuration():"");
                 orderObj.put("doseUnits", convertToFull(drugOrder.getDoseUnits()));
                 orderObj.put("frequency", convertToFull(drugOrder.getFrequency()));
                 orderObj.put("quantity", drugOrder.getQuantity());
@@ -154,6 +162,7 @@ public class DrugOrdersPageController {
         JSONObject activeOrdersResponse=new JSONObject();
         activeOrdersResponse.put("order_groups",orderGroupArray);
         activeOrdersResponse.put("single_drugs",orderArray);
+        System.out.println("ui.toJson(activeOrdersResponse)=============="+ui.toJson(activeOrdersResponse));
         model.put("activeOrdersResponse",ui.toJson(activeOrdersResponse));
         //model.put("currentApp",app);
         //model.addAttribute("appHomepageUrl", app.getUrl());
